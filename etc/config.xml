@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<!--
+ * Celebros
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish correct extension functionality.
+ * If you wish to customize it, please contact Celebros.
+ *
+ ******************************************************************************
+ * @category    Celebros
+ * @package     Celebros_Crosssell
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
+    <default>
+        <celebros_crosssell>
+            <general>
+                <crosssell_enabled>0</crosssell_enabled>
+                <crosssell_limit>4</crosssell_limit>
+                <upsell_enabled>0</upsell_enabled>
+                <upsell_limit>4</upsell_limit>
+            </general>
+            <advanced>
+                <crosssell_customer_name></crosssell_customer_name>
+                <crosssell_request_handle></crosssell_request_handle>
+                <crosssell_address></crosssell_address>
+            </advanced>
+            <debug>
+                <request_show>0</request_show>
+            </debug>
+        </celebros_crosssell>
+    </default>
+</config>

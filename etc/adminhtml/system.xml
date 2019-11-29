@@ -1,0 +1,80 @@
+<?xml version="1.0"?>
+<!--
+ * Celebros
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish correct extension functionality.
+ * If you wish to customize it, please contact Celebros.
+ *
+ ******************************************************************************
+ * @category    Celebros
+ * @package     Celebros_Crosssell
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+    <system>
+        <section id="celebros_crosssell" translate="label" sortOrder="130" showInDefault="1" showInWebsite="0" showInStore="1">
+            <label>Crosssell / Upsell</label>
+            <class>separator-top celcrosssell-tab</class>
+            <tab>celebros</tab>
+            <resource>Celebros_Crosssell::config_crosssell</resource>
+            <group id="general" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="1">
+                <label>General Settings</label>
+                <hide_in_single_store_mode>0</hide_in_single_store_mode>
+                <field id="crosssell_enabled" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="1">
+                    <label>Enable Cart Crosssell</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="crosssell_limit" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="0" showInStore="1">
+                    <label>No. of Crosssell Items in Cart</label>
+                    <validate>validate-number validate-greater-than-zero</validate>
+                    <depends>
+                        <field id="crosssell_enabled">1</field>
+                    </depends>
+                </field>
+                <field id="upsell_enabled" translate="label" type="select" sortOrder="30" showInDefault="1" showInWebsite="0" showInStore="1">
+                    <label>Enable Product Page Upsell</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>   
+                <field id="upsell_limit" translate="label" type="text" sortOrder="40" showInDefault="1" showInWebsite="0" showInStore="1">
+                    <label>No. of Upsell Items in Product Page</label>
+                    <validate>validate-number validate-greater-than-zero</validate>
+                    <depends>
+                        <field id="upsell_enabled">1</field>
+                    </depends>
+                </field>
+            </group>
+            <group id="advanced" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="0" showInStore="1">
+                <label>Advanced</label>
+                <hide_in_single_store_mode>0</hide_in_single_store_mode>
+                <field id="crosssell_customer_name" translate="label" type="text" sortOrder="50" showInDefault="1" showInWebsite="0" showInStore="1">
+                    <label>Cross-Sell Customer Name</label>
+                    <comment>Cross-Sell customer name as defined by Celebros</comment>
+                </field>
+                <field id="crosssell_request_handle" translate="label" type="text" sortOrder="60" showInDefault="1" showInWebsite="0" showInStore="1">
+                    <label>Cross-Sell Request Handle</label>
+                    <comment>Cross-Sell request handle name as defined by Celebros</comment>
+                </field>
+                <field id="crosssell_address" translate="label" type="text" sortOrder="70" showInDefault="1" showInWebsite="0" showInStore="1">
+                    <label>Cross-Sell Server</label>
+                    <comment>Host name / ip of the server on which the Cross-Sell resides</comment>
+                </field>
+            </group>
+            <group id="debug" translate="label" type="text" sortOrder="30" showInDefault="1" showInWebsite="0" showInStore="0">
+                <label>Debug</label>
+                <hide_in_single_store_mode>0</hide_in_single_store_mode>
+               <field id="request_show" translate="label" type="select" sortOrder="20" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
+                    <label>Show Current Requests</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+            </group>
+            <group id="about" translate="label" type="text" sortOrder="50" showInDefault="1" showInWebsite="0" showInStore="1">
+                <label>About</label>
+                <hide_in_single_store_mode>0</hide_in_single_store_mode>
+                <field id="info" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="1">
+                    <frontend_model>Celebros\Crosssell\Block\System\Config\Form\Field\Info</frontend_model>
+                </field>
+            </group>
+        </section>
+    </system>
+</config>
