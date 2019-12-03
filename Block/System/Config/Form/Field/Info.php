@@ -26,6 +26,7 @@ class Info extends \Magento\Config\Block\System\Config\Form\Field
     protected $_moduleDb;
     
     /**
+     * @param \Magento\Framework\Module\ResourceInterface $moduleDb
      * @return void
      */
     public function __construct(
@@ -35,7 +36,7 @@ class Info extends \Magento\Config\Block\System\Config\Form\Field
     }
     
     /**
-     * @var \Magento\Framework\Data\Form\Element\AbstractElement
+     * @param \Magento\Framework\Data\Form\Element\AbstractElement $element
      * @return string 
      */ 
     public function render(\Magento\Framework\Data\Form\Element\AbstractElement $element)

@@ -24,6 +24,7 @@ class Product
 
     /**
      * @param \Celebros\Crosssell\Helper\Data $helper
+     * @return void
      */
     public function __construct(
         Api $helper

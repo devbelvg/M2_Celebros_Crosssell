@@ -18,13 +18,11 @@ use Magento\Checkout\Model\Session as Session;
 use Magento\Catalog\Block\Product\Context as Context;
 use Magento\Catalog\Model\ResourceModel\Product\Collection as Collection;
 
+/**
+ * Crosssell block plugin 
+ */
 class Crosssell
 {
-    /**
-     * @var \Celebros\Crosssell\Helper\Data
-     */
-    public $helper;
-
     /**
      * @var \Magento\Checkout\Model\Session
      */
@@ -49,9 +47,15 @@ class Crosssell
      * @var array
      */
     protected $_items = [];
+
+    /**
+     * @var \Celebros\Crosssell\Helper\Data
+     */
+    public $helper;
     
     /**
      * @param \Celebros\Crosssell\Helper\Data $helper
+     * @return void     
      */
     public function __construct(
         Api $helper,
@@ -63,47 +67,7 @@ class Crosssell
         $this->_catalogConfig = $context->getCatalogConfig();
         $this->_maxItemCount = $this->helper->getCrosssellLimit();
     }
-    
-    /**
-     * @param \Magento\Checkout\Block\Cart\Crosssell $subj
-     * @param array $result
-     * @return array
-     */
-    public function aroundGetItems(\Magento\Checkout\Block\Cart\Crosssell $subj, $result)
-    {
-        if ($this->helper->isCrosssellEnabled()) {
-            $this->items = (array)$subj->getData('items');
-            if (empty($this->items)) {
-                $lastAddedId = (int)$this->_getLastAddedProductId();
-                $lastAddedProduct = null;
-                $quoteItems = $subj->getQuote()->getAllItems();
-                foreach ($quoteItems as $item) {
-                    $this->_addedIds[] = $item->getProductId();
-                    if ($item->getProductId() == $lastAddedId) {
-                        $lastAddedProduct = $item->getProduct();
-                    }
-                }
 
-                if ($lastAddedProduct instanceof \Magento\Catalog\Model\Product) {
-                    $this->_collectItems($lastAddedProduct);
-                }
-                
-                if (count($this->items) < $this->_maxItemCount) {
-                    foreach ($quoteItems as $item) {
-                        $product = $item->getProduct();
-                        $this->_collectItems($product);
-                    }
-                }
-
-                $subj->setData('items', $this->items);
-            }
-            
-            return $this->items;
-        } else {
-            return $result;
-        }
-    }
-    
     /**
      * @param \Magento\Catalog\Model\Product $product
      * @return void
@@ -142,5 +106,45 @@ class Crosssell
             ->addAttributeToSelect(
                 $this->_catalogConfig->getProductAttributes()
             )->addUrlRewrite();
+    }
+    
+    /**
+     * @param \Magento\Checkout\Block\Cart\Crosssell $subj
+     * @param array $result
+     * @return array
+     */
+    public function aroundGetItems(\Magento\Checkout\Block\Cart\Crosssell $subj, $result)
+    {
+        if ($this->helper->isCrosssellEnabled()) {
+            $this->items = (array)$subj->getData('items');
+            if (empty($this->items)) {
+                $lastAddedId = (int)$this->_getLastAddedProductId();
+                $lastAddedProduct = null;
+                $quoteItems = $subj->getQuote()->getAllItems();
+                foreach ($quoteItems as $item) {
+                    $this->_addedIds[] = $item->getProductId();
+                    if ($item->getProductId() == $lastAddedId) {
+                        $lastAddedProduct = $item->getProduct();
+                    }
+                }
+
+                if ($lastAddedProduct instanceof \Magento\Catalog\Model\Product) {
+                    $this->_collectItems($lastAddedProduct);
+                }
+                
+                if (count($this->items) < $this->_maxItemCount) {
+                    foreach ($quoteItems as $item) {
+                        $product = $item->getProduct();
+                        $this->_collectItems($product);
+                    }
+                }
+
+                $subj->setData('items', $this->items);
+            }
+            
+            return $this->items;
+        }
+        
+        return $result;
     }
 }

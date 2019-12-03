@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<!--
+ * Celebros
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish correct extension functionality.
+ * If you wish to customize it, please contact Celebros.
+ *
+ ******************************************************************************
+ * @category    Celebros
+ * @package     Celebros_Crosssell
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Cache/etc/cache.xsd">
+    <type name="celebros_crosssell" translate="label,description" instance="Celebros\Crosssell\Model\Cache\Type\Request">
+        <label>Celebros Crosssell</label>
+        <description>Celebros Crosssell / Upsell plugin cache.</description>
+    </type>
+</config>
