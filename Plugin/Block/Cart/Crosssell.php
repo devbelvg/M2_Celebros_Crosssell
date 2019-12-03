@@ -82,7 +82,7 @@ class Crosssell
                 $this->items[] = $it;
                 $this->_addedIds[] = $it->getEntityId();
             }
-        } 
+        }
     }
     
     /**

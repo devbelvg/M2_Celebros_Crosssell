@@ -33,18 +33,30 @@ class Product
     }
 
     /**
+     * @param \Magento\Catalog\Model\ResourceModel\Product\Link\Product\Collection $collection
+     * @return \Magento\Catalog\Model\ResourceModel\Product\Link\Product\Collection
+     */
+    protected function _prepareAndSortCollection(
+        \Magento\Catalog\Model\ResourceModel\Product\Link\Product\Collection $collection,
+        array $skus
+    ) {
+        $collection->addFieldToFilter('sku', $skus);
+        $collection->getSelect()->order(new \Zend_Db_Expr("FIELD(`e`.`sku`, '" . implode("','", $skus) . "') ASC"));
+
+        return $collection;
+    }
+
+    /**
      * @param \Magento\Catalog\Model\Product $subj
      * @param \Magento\Catalog\Model\ResourceModel\Product\Link\Product\Collection $result
      * @return \Magento\Catalog\Model\ResourceModel\Product\Link\Product\Collection
      */
     public function afterGetUpSellProductCollection(\Magento\Catalog\Model\Product $subj, $result)
     {
-        if ($this->helper->isUpsellEnabled()) {
-            $skus = $this->helper->getRecommendedIds($subj->getSku());
+        $skus = $this->helper->getRecommendedIds($subj->getSku(), $this->helper->getUpsellLimit());
+        if ($this->helper->isUpsellEnabled() && !empty($skus)) {
             $collection = $subj->getLinkInstance()->useUpSellLinks()->getProductCollection();
-            $collection->addFieldToFilter('sku', $skus);
-        
-            return $collection;
+            return $this->_prepareAndSortCollection($collection, $skus);
         } else {
             return $result;
         }
@@ -57,12 +69,10 @@ class Product
      */
     public function afterGetCrossSellProductCollection(\Magento\Catalog\Model\Product $subj, $result)
     {
-        if ($this->helper->isCrosssellEnabled()) {
-            $skus = $this->helper->getRecommendedIds($subj->getSku());
+        $skus = $this->helper->getRecommendedIds($subj->getSku(), $this->helper->getCrosssellLimit());
+        if ($this->helper->isCrosssellEnabled() && !empty($skus)) {
             $collection = $subj->getLinkInstance()->useCrossSellLinks()->getProductCollection();
-            $collection->addFieldToFilter('sku', $skus);
-            
-            return $collection;
+            return $this->_prepareAndSortCollection($collection, $skus);
         } else {
             return $result;
         }

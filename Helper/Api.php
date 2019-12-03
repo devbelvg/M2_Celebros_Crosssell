@@ -159,16 +159,23 @@ class Api extends \Celebros\Crosssell\Helper\Data
      * @param array $result
      * @return array
      */
-    protected function extractItemIds(array $result) : array
+    protected function extractItemIds(array $result, int $limit) : array
     {
         if (isset($result['Items'])) {
             $skus = [];
             foreach ($result['Items'] as $item) {
-                if (isset($item['Fields']) && isset($item['Fields']['SKU'])) {
-                    $skus[] = $item['Fields']['SKU'];
+                if (isset($item['Fields'])
+                && isset($item['Fields']['Rank'])    
+                && isset($item['Fields']['SKU'])) {
+                    $skus[$item['Fields']['Rank']] = $item['Fields']['SKU'];
                 }
             }    
-        
+
+            ksort($skus);
+            if ($limit) {
+                $skus = array_slice($skus, 0, $limit);
+            }
+
             return $skus;
         }
         
@@ -192,7 +199,7 @@ class Api extends \Celebros\Crosssell\Helper\Data
      * @param string $sku
      * @return array
      */
-    public function getRecommendedIds($sku) : array
+    public function getRecommendedIds($sku, int $limit = 0) : array
     {
         $cacheId = $this->cache->getId(__METHOD__, array($sku));
         $this->prepareApiUrl($sku);
@@ -216,7 +223,7 @@ class Api extends \Celebros\Crosssell\Helper\Data
                 
             $result = (array)$this->jsonHelper->jsonDecode($this->curl->getBody());
             if ($this->checkStatus($result)) {
-                $ids = $this->extractItemIds($result);
+                $ids = $this->extractItemIds($result, $limit);
                 $this->cache->save(implode(",", $ids), $cacheId);
                 return $ids;
             }
