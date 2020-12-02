@@ -2,14 +2,14 @@
     "name": "celebros/module-crosssell",
     "description": "Celebros Crosssell",
     "type": "magento2-module",
-    "version": "0.9.3",
+    "version": "0.9.4",
     "license": [
         "OSL-3.0",
         "AFL-3.0"
     ],
     "require": {
-        "php": "~5.6.5|7.0.2|7.0.4|~7.0.6|7.1.*|7.2.*|7.3.*",
-        "celebros/module-main": ">=0.9.7"
+        "php": "~5.6.5|7.0.2|7.0.4|~7.0.6|7.1.*|7.2.*|7.3.*|7.4.*",
+        "celebros/module-main": ">=0.9.11"
     },
     "autoload": {
         "files": [ "registration.php" ],

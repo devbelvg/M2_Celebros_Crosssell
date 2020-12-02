@@ -18,4 +18,13 @@
     <type name="Magento\Checkout\Block\Cart\Crosssell">
         <plugin name="celebros_crosssell_block" type="Celebros\Crosssell\Plugin\Block\Cart\Crosssell"/>
     </type>
+    <type name="Magento\TargetRule\Block\Checkout\Cart\Crosssell">
+        <plugin name="celebros_targetrule_crosssell_block" type="Celebros\Crosssell\Plugin\Block\Cart\Crosssell"/>
+    </type>    
+    <type name="Magento\TargetRule\Block\Catalog\Product\ProductList\Upsell">
+        <plugin name="celebros_targetRule_block_catalog_product_productlist_upsell" type="Celebros\Crosssell\Plugin\Block\AbstractProduct"/>
+    </type>
+    <type name="Magento\TargetRule\Block\Checkout\Cart\Crosssell">
+        <plugin name="celebros_targetrule_block_checkout_cart_crosssell" type="Celebros\Crosssell\Plugin\Block\AbstractProduct"/>
+    </type>
 </config>

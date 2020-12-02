@@ -17,6 +17,7 @@ use Celebros\Crosssell\Helper\Api as Api;
 use Magento\Checkout\Model\Session as Session;
 use Magento\Catalog\Block\Product\Context as Context;
 use Magento\Catalog\Model\ResourceModel\Product\Collection as Collection;
+use Magento\Catalog\Model\ProductRepository;
 
 /**
  * Crosssell block plugin 
@@ -60,10 +61,12 @@ class Crosssell
     public function __construct(
         Api $helper,
         Session $checkoutSession,
+        ProductRepository $productRepository,
         Context $context
     ) {
         $this->helper = $helper;
         $this->_checkoutSession = $checkoutSession;
+        $this->_productRepository = $productRepository;
         $this->_catalogConfig = $context->getCatalogConfig();
         $this->_maxItemCount = $this->helper->getCrosssellLimit();
     }
@@ -74,6 +77,9 @@ class Crosssell
      */
     protected function _collectItems(\Magento\Catalog\Model\Product $product)
     {
+        $id = $product->getEntityId();
+        $product = $this->_productRepository->getById($id);
+        
         $collection = $product->getCrossSellProductCollection();
         $collection = $this->_addProductAttributesAndPrices($collection);
         foreach ($collection as $it) {
@@ -110,10 +116,10 @@ class Crosssell
     
     /**
      * @param \Magento\Checkout\Block\Cart\Crosssell $subj
-     * @param array $result
+     * @param callable $proceed
      * @return array
      */
-    public function aroundGetItems(\Magento\Checkout\Block\Cart\Crosssell $subj, $result)
+    public function aroundGetItems(\Magento\Checkout\Block\Cart\Crosssell $subj, callable $proceed)
     {
         if ($this->helper->isCrosssellEnabled()) {
             $this->items = (array)$subj->getData('items');
@@ -145,6 +151,45 @@ class Crosssell
             return $this->items;
         }
         
-        return $result;
+        return $proceed();
+    }
+    
+    /**
+     * Retrieve array of cross-sell products
+     *
+     * @return array
+     */
+    public function aroundGetItemCollection(\Magento\TargetRule\Block\Checkout\Cart\Crosssell $subj, callable $proceed)
+    {
+        if ($this->helper->isCrosssellEnabled()) {
+            $this->items = (array)$subj->getData('items');
+            if (empty($this->items)) {
+                $lastAddedId = (int)$this->_getLastAddedProductId();
+                $lastAddedProduct = null;
+                $quoteItems = $subj->getQuote()->getAllItems();
+                foreach ($quoteItems as $item) {
+                    $this->_addedIds[] = $item->getProductId();
+                    if ($item->getProductId() == $lastAddedId) {
+                        $lastAddedProduct = $item->getProduct();
+                    }
+                }
+
+                if ($lastAddedProduct instanceof \Magento\Catalog\Model\Product) {
+                    $this->_collectItems($lastAddedProduct);
+                }
+                
+                if (count($this->items) < $this->_maxItemCount) {
+                    foreach ($quoteItems as $item) {
+                        $product = $item->getProduct();
+                        $this->_collectItems($product);
+                    }
+                }
+                $subj->setData('items', $this->items);
+            }
+            
+            return $this->items;
+        }
+        
+        return $proceed();
     }
 }

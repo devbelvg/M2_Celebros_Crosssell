@@ -53,13 +53,19 @@ class Product
      */
     public function afterGetUpSellProductCollection(\Magento\Catalog\Model\Product $subj, $result)
     {
-        $skus = $this->helper->getRecommendedIds($subj->getSku(), $this->helper->getUpsellLimit());
-        if ($this->helper->isUpsellEnabled() && !empty($skus)) {
-            $collection = $subj->getLinkInstance()->useUpSellLinks()->getProductCollection();
-            return $this->_prepareAndSortCollection($collection, $skus);
-        } else {
-            return $result;
+        if ($this->helper->isUpsellEnabled()) {
+            $skus = $this->helper->getRecommendedIds(
+                $subj->getSku(),
+                $this->helper->getUpsellLimit()
+            );
+            
+            if (!empty($skus)) {
+                $collection = $subj->getLinkInstance()->useUpSellLinks()->getProductCollection();
+                return $this->_prepareAndSortCollection($collection, $skus);
+            }
         }
+        
+        return $result;
     }
     
     /**
@@ -69,12 +75,18 @@ class Product
      */
     public function afterGetCrossSellProductCollection(\Magento\Catalog\Model\Product $subj, $result)
     {
-        $skus = $this->helper->getRecommendedIds($subj->getSku(), $this->helper->getCrosssellLimit());
-        if ($this->helper->isCrosssellEnabled() && !empty($skus)) {
-            $collection = $subj->getLinkInstance()->useCrossSellLinks()->getProductCollection();
-            return $this->_prepareAndSortCollection($collection, $skus);
-        } else {
-            return $result;
+        if ($this->helper->isCrosssellEnabled()) {
+            $skus = $this->helper->getRecommendedIds(
+                $subj->getSku(),
+                $this->helper->getCrosssellLimit()
+            );
+            
+            if (!empty($skus)) {
+                $collection = $subj->getLinkInstance()->useCrossSellLinks()->getProductCollection();
+                return $this->_prepareAndSortCollection($collection, $skus);
+            }
         }
+        
+        return $result;
     }
 }
