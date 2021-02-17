@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Celebros
  *
@@ -11,6 +12,7 @@
  * @category    Celebros
  * @package     Celebros_Crosssell
  */
+
 namespace Celebros\Crosssell\Plugin\Model;
 
 use Celebros\Crosssell\Helper\Api as Api;
@@ -36,7 +38,7 @@ class Product
      * @param \Magento\Catalog\Model\ResourceModel\Product\Link\Product\Collection $collection
      * @return \Magento\Catalog\Model\ResourceModel\Product\Link\Product\Collection
      */
-    protected function _prepareAndSortCollection(
+    protected function prepareAndSortCollection(
         \Magento\Catalog\Model\ResourceModel\Product\Link\Product\Collection $collection,
         array $skus
     ) {
@@ -54,20 +56,22 @@ class Product
     public function afterGetUpSellProductCollection(\Magento\Catalog\Model\Product $subj, $result)
     {
         if ($this->helper->isUpsellEnabled()) {
+            $type = 'upsell';
             $skus = $this->helper->getRecommendedIds(
                 $subj->getSku(),
-                $this->helper->getUpsellLimit()
+                $this->helper->getUpsellLimit(),
+                $type
             );
-            
+
             if (!empty($skus)) {
                 $collection = $subj->getLinkInstance()->useUpSellLinks()->getProductCollection();
-                return $this->_prepareAndSortCollection($collection, $skus);
+                return $this->prepareAndSortCollection($collection, $skus);
             }
         }
-        
+
         return $result;
     }
-    
+
     /**
      * @param \Magento\Catalog\Model\Product $subj
      * @param \Magento\Catalog\Model\ResourceModel\Product\Link\Product\Collection $result
@@ -76,17 +80,19 @@ class Product
     public function afterGetCrossSellProductCollection(\Magento\Catalog\Model\Product $subj, $result)
     {
         if ($this->helper->isCrosssellEnabled()) {
+            $type = 'crosssell';
             $skus = $this->helper->getRecommendedIds(
                 $subj->getSku(),
-                $this->helper->getCrosssellLimit()
+                $this->helper->getCrosssellLimit(),
+                $type
             );
-            
+
             if (!empty($skus)) {
                 $collection = $subj->getLinkInstance()->useCrossSellLinks()->getProductCollection();
-                return $this->_prepareAndSortCollection($collection, $skus);
+                return $this->prepareAndSortCollection($collection, $skus);
             }
         }
-        
+
         return $result;
     }
 }

@@ -6,4 +6,7 @@ Celebros Crosssells / Upsells
 
 0.9.3 - technical updates
 
-0.9.4 - php 7.4.x has been added to require dependency; technical fixes
+0.9.4 - php 7.4.x has been added to require dependency
+
+0.9.5 - technical fixes
+

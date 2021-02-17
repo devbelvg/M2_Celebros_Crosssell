@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Celebros
  *
@@ -11,26 +12,27 @@
  * @category    Celebros
  * @package     Celebros_Crosssell
  */
+
 namespace Celebros\Crosssell\Helper;
 
 use Magento\Store\Model\ScopeInterface;
 
 /**
- * Crosssell data helper 
+ * Crosssell data helper
  */
 class Data extends \Magento\Framework\App\Helper\AbstractHelper
 {
-    const XML_PATH_CROSSSELL_ENABLED = 'celebros_crosssell/general/crosssell_enabled';
-    const XML_PATH_CROSSSELL_LIMIT = 'celebros_crosssell/general/crosssell_limit';
-    const XML_PATH_UPSELL_ENABLED = 'celebros_crosssell/general/upsell_enabled';
-    const XML_PATH_UPSELL_LIMIT = 'celebros_crosssell/general/upsell_limit';
-    const XML_PATH_DEBUG_REQUEST_SHOW = 'celebros_crosssell/debug/request_show';
-    
+    public const XML_PATH_CROSSSELL_ENABLED = 'celebros_crosssell/general/crosssell_enabled';
+    public const XML_PATH_CROSSSELL_LIMIT = 'celebros_crosssell/general/crosssell_limit';
+    public const XML_PATH_UPSELL_ENABLED = 'celebros_crosssell/general/upsell_enabled';
+    public const XML_PATH_UPSELL_LIMIT = 'celebros_crosssell/general/upsell_limit';
+    public const XML_PATH_DEBUG_REQUEST_SHOW = 'celebros_crosssell/debug/request_show';
+
     /**
      * @var string
      */
     public $debugMessageTitle = 'Celebros Crosssell Engine';
-    
+
     /**
      * @param int $store
      * @return bool
@@ -43,7 +45,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
             $store
         );
     }
-    
+
     /**
      * @param int $store
      * @return int
@@ -56,7 +58,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
             $store
         );
     }
-    
+
     /**
      * @param int $store
      * @return bool
@@ -69,7 +71,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
             $store
         );
     }
-    
+
     /**
      * @param int $store
      * @return int
@@ -82,7 +84,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
             $store
         );
     }
-    
+
     /**
      * @param int $store
      * @return bool
@@ -95,7 +97,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
             $store
         );
     }
-    
+
     /**
      * @param array $data
      * @return string
@@ -107,10 +109,10 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         unset($data['title']);
         foreach ($data as $key => $val) {
             if ($val) {
-                $str .= '<br>' . ucfirst(__($key)) . ': ' . $val;
+                $str .= ' >>> ' . ucfirst(__($key)) . ': ' . $val;
             }
         }
-            
+
         return $str;
     }
 }

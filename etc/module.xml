@@ -12,7 +12,7 @@
  * @package     Celebros_Crosssell
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Module/etc/module.xsd">
-    <module name="Celebros_Crosssell" setup_version="0.9.4">
+    <module name="Celebros_Crosssell" setup_version="0.9.5">
         <sequence>
             <module name="Celebros_Main"/>
         </sequence>
